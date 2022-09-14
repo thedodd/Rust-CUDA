@@ -141,14 +141,15 @@ or planned to be supported in the future. As well as tracking some information a
 be supported.</p>
 <p>Note that <code>Not supported</code> does <strong>not</strong> mean it won't ever be supported, it just means we haven't gotten
 around to adding it yet.</p>
-<table><thead><tr><th>Indicator</th><th>Meaning</th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th>Indicator</th><th>Meaning</th></tr></thead><tbody>
 <tr><td>➖</td><td>Not Applicable</td></tr>
 <tr><td>❌</td><td>Not Supported</td></tr>
 <tr><td>✔️</td><td>Fully Supported</td></tr>
 <tr><td>🟨</td><td>Partially Supported</td></tr>
 </tbody></table>
+</div>
 <h1 id="rust-features"><a class="header" href="#rust-features">Rust Features</a></h1>
-<table><thead><tr><th>Feature Name</th><th>Support Level</th><th>Notes</th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th>Feature Name</th><th>Support Level</th><th>Notes</th></tr></thead><tbody>
 <tr><td>Opt-Levels</td><td>✔️</td><td>behaves mostly the same (because llvm is still used for optimizations). Except that libnvvm opts are run on anything except no-opts because nvvm only has -O0 and -O3</td></tr>
 <tr><td>codegen-units</td><td>✔️</td><td></td></tr>
 <tr><td>LTO</td><td>➖</td><td>we load bitcode modules lazily using dependency graphs, which then forms a single module optimized by libnvvm, so all the benefits of LTO are on without pre-libnvvm LTO being needed.</td></tr>
@@ -171,25 +172,27 @@ around to adding it yet.</p>
 <tr><td>Float Ops</td><td>✔️</td><td>Maps to libdevice intrinsics, calls to libm are not intercepted though, which we may want to do in the future</td></tr>
 <tr><td>Atomics</td><td>❌</td><td></td></tr>
 </tbody></table>
+</div>
 <h1 id="cuda-libraries"><a class="header" href="#cuda-libraries">CUDA Libraries</a></h1>
-<table><thead><tr><th>Library Name</th><th>Support Level</th><th>Notes</th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th>Library Name</th><th>Support Level</th><th>Notes</th></tr></thead><tbody>
 <tr><td>CUDA Runtime API</td><td>➖</td><td>The CUDA Runtime API is for CUDA C++, we use the driver API</td></tr>
 <tr><td>CUDA Driver API</td><td>🟨</td><td>Most functions are implemented, but there is still a lot left to wrap because it is gigantic</td></tr>
-<tr><td>cuBLAS</td><td>❌</td><td></td></tr>
+<tr><td>cuBLAS</td><td>❌</td><td>In-progress</td></tr>
 <tr><td>cuFFT</td><td>❌</td><td></td></tr>
 <tr><td>cuSOLVER</td><td>❌</td><td></td></tr>
 <tr><td>cuRAND</td><td>➖</td><td>cuRAND only works with the runtime API, we have our own general purpose GPU rand library called <code>gpu_rand</code></td></tr>
-<tr><td>cuDNN</td><td>❌</td><td></td></tr>
+<tr><td>cuDNN</td><td>❌</td><td>In-progress</td></tr>
 <tr><td>cuSPARSE</td><td>❌</td><td></td></tr>
 <tr><td>AmgX</td><td>❌</td><td></td></tr>
 <tr><td>cuTENSOR</td><td>❌</td><td></td></tr>
 <tr><td>OptiX</td><td>🟨</td><td>CPU OptiX is mostly complete, GPU OptiX is still heavily in-progress because it needs support from the codegen</td></tr>
 </tbody></table>
+</div>
 <h1 id="gpu-side-features"><a class="header" href="#gpu-side-features">GPU-side Features</a></h1>
 <p>Note: Most of these categories are used <strong>very</strong> rarely in CUDA code, therefore
 do not be alarmed that it seems like many things are not supported. We just focus
 on things used by the wide majority of users.</p>
-<table><thead><tr><th>Feature Name</th><th>Support Level</th><th>Notes</th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th>Feature Name</th><th>Support Level</th><th>Notes</th></tr></thead><tbody>
 <tr><td>Function Execution Space Specifiers</td><td>➖</td><td></td></tr>
 <tr><td>Variable Memory Space Specifiers</td><td>✔️</td><td>Handled Implicitly but can be explicitly stated for statics with <code>#[address_space(...)]</code></td></tr>
 <tr><td>Built-in Vector Types</td><td>➖</td><td>Use linear algebra libraries like vek or glam</td></tr>
@@ -228,12 +231,12 @@ on things used by the wide majority of users.</p>
 <tr><td>SIMD Video Instructions</td><td>❌</td><td></td></tr>
 <tr><td>Cooperative Groups</td><td>❌</td><td></td></tr>
 <tr><td>Dynamic Parallelism</td><td>❌</td><td></td></tr>
-<tr><td>Stream Ordered Memory</td><td>❌</td><td></td></tr>
+<tr><td>Stream Ordered Memory</td><td>✔️</td><td></td></tr>
 <tr><td>Graph Memory Nodes</td><td>❌</td><td></td></tr>
 <tr><td>Unified Memory</td><td>✔️</td><td></td></tr>
 <tr><td><code>__restrict__</code></td><td>➖</td><td>Not needed, you get that performance boost automatically through rust's noalias :)</td></tr>
 </tbody></table>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="frequently-asked-questions"><a class="header" href="#frequently-asked-questions">Frequently Asked Questions</a></h1>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="frequently-asked-questions"><a class="header" href="#frequently-asked-questions">Frequently Asked Questions</a></h1>
 <p>This page will cover a lot of the questions people often have when they encounter this project,
 so they are addressed all at once.</p>
 <h2 id="why-not-use-rustc-with-the-llvm-ptx-backend"><a class="header" href="#why-not-use-rustc-with-the-llvm-ptx-backend">Why not use rustc with the LLVM PTX backend?</a></h2>
@@ -553,6 +556,8 @@ edition = &quot;2021&quot;
     feature(register_attr),
     register_attr(nvvm_internal)
 )]
+
+use cuda_std::*;
 </code></pre>
 <p>This does a couple of things:</p>
 <ul>
@@ -560,6 +565,7 @@ edition = &quot;2021&quot;
 <li>It declares the crate to be <code>no_std</code> on CUDA targets.</li>
 <li>It registers a special attribute required by the codegen for things like figuring out
 what functions are GPU kernels.</li>
+<li>It explicitly includes <code>kernel</code> macro and <code>thread</code></li>
 </ul>
 <p>If you would like to use <code>alloc</code> or things like printing from GPU kernels (which requires alloc) then you need to declare <code>alloc</code> too:</p>
 <pre><code class="language-rs">extern crate alloc;
@@ -651,6 +657,17 @@ from scratch, but after the first compile, incremental will make it much faster.
 <pre><code class="language-rs">static PTX: &amp;str = include_str!(&quot;some/path.ptx&quot;);
 </code></pre>
 <p>Then execute it using cust.</p>
+<p>Don't forget to include the current <code>rust-toolchain</code> in the top of your project:</p>
+<pre><code class="language-toml"># If you see this, run `rustup self update` to get rustup 1.23 or newer.
+
+# NOTE: above comment is for older `rustup` (before TOML support was added),
+# which will treat the first line as the toolchain name, and therefore show it
+# to the user in the error, instead of &quot;error: invalid channel name '[toolchain]'&quot;.
+
+[toolchain]
+channel = &quot;nightly-2021-12-04&quot;
+components = [&quot;rust-src&quot;, &quot;rustc-dev&quot;, &quot;llvm-tools-preview&quot;]
+</code></pre>
 <h2 id="docker"><a class="header" href="#docker">Docker</a></h2>
 <p>There is also a <a href="guide/Dockerfile">Dockerfile</a> prepared as a quickstart with all the necessary libraries for base cuda development.</p>
 <p>You can use it as follows (assuming your clone of Rust-CUDA is at the absolute path <code>RUST_CUDA</code>):</p>
